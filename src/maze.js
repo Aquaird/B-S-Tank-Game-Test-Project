@@ -64,4 +64,34 @@ function maze(x,y){
         wall_col:wall_col,
         wall_row:wall_row
     }
-}
+};
+
+var MapNode = cc.DrawNode.extend({
+    ctor:function(){
+        this._super();
+    },
+});
+
+MapNode.prototype.DrawMap = function(){
+    TB.MAP.map_size = [Math.floor(Math.random()*5+4), Math.floor(Math.random()*5+3)];
+    TB.MAP.map = maze(TB.MAP.map_size[0],TB.MAP.map_size[1]);
+    TB.MAP.unit_x = TB.SIZE.width/TB.MAP.map_size[0];
+    TB.MAP.unit_y = TB.SIZE.height/TB.MAP.map_size[1];
+
+    for(var i=0; i<TB.MAP.map.x+1; i++){
+        for(var j=0; j<TB.MAP.map.y+1; j++){
+            if(TB.MAP.map.wall_row[i][j]){
+                ;
+            }
+            else{
+                this.drawSegment(cc.p(i*TB.MAP.unit_x,j*TB.MAP.unit_y),cc.p((i+1)*TB.MAP.unit_x,j*TB.MAP.unit_y),5,cc.color(0,0,0));
+            }
+            if(TB.MAP.map.wall_col[i][j]){
+                ;
+            }
+            else{
+                this.drawSegment(cc.p(i*TB.MAP.unit_x,j*TB.MAP.unit_y),cc.p(i*TB.MAP.unit_x,(j+1)*TB.MAP.unit_y),5,cc.color(0,0,0));
+            }
+        }
+    }
+};
