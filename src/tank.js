@@ -30,6 +30,7 @@ var Tank = cc.Sprite.extend({
         }
 
         this.tank_tag = TB.CONTAINER.TANKS.length;
+        this.setTag(this.tank_tag);
         TB.CONTAINER.TANKS.push(this);
         this.size = this.getContentSize();
 
@@ -55,6 +56,7 @@ var Tank = cc.Sprite.extend({
             if(this.block()[0]){
                 this.y -= 3*(dt * TB.SPEED.TANK)*Math.sin(2*Math.PI/360*-this.rotation);
                 this.x -= 3*(dt * TB.SPEED.TANK)*Math.cos(2*Math.PI/360*-this.rotation);
+                this.updatepoint();
             }
         }
         if ((TB.KEYS[cc.KEY.s] || TB.KEYS[cc.KEY.down])) {
@@ -65,6 +67,7 @@ var Tank = cc.Sprite.extend({
             if(this.block()[0]){
                 this.y += 3*(dt * TB.SPEED.TANK)*Math.sin(2*Math.PI/360*-this.rotation);
                 this.x += 3*(dt * TB.SPEED.TANK)*Math.cos(2*Math.PI/360*-this.rotation);
+                this.updatepoint();
             }
         }
         if ((TB.KEYS[cc.KEY.d] || TB.KEYS[cc.KEY.right])) {
@@ -73,6 +76,7 @@ var Tank = cc.Sprite.extend({
 
             if(this.block()[0]){
                 this.rotation -= 3*TB.SPEED.GUN * dt;
+                this.updatepoint();
             }
         }
         if ((TB.KEYS[cc.KEY.a] || TB.KEYS[cc.KEY.left])) {
@@ -81,13 +85,19 @@ var Tank = cc.Sprite.extend({
 
             if(this.block()[0]){
                 this.rotation += 3*TB.SPEED.GUN * dt;
+                this.updatepoint();
             }
         }
 
 
-        if(TB.KEYS[cc.KEY.space]){
-            if(this.bulletRemain-- >= 0)
-            this.shoot(dt);
+        if(TB.KEYS[cc.KEY.j]){
+
+            if(this.bulletRemain > 0) {
+                this.bulletRemain -= 1;
+                TB.KEYS[cc.KEY.j] = false;
+                this.shoot();
+            }
+
         }
 
 
@@ -151,7 +161,7 @@ var Tank = cc.Sprite.extend({
         return false
     },
 
-    shoot: function(dt){
+    shoot: function(){
         Bullet.getOrCreateBullet(this.x,this.y,this.rotation,this.tank_tag);
     }
 });

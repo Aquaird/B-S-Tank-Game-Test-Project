@@ -6,13 +6,11 @@ var Game_Layer = cc.LayerColor.extend({
 
     ctor:function() {
         this._super(cc.color(255, 255, 255));
-        TB.sharedGameLayer = this;
         this.init();
     },
 
     init:function(){
         var size = cc.director.getWinSize();
-
         //Reset Global
         TB.CONTAINER.TANKS = [];
         TB.CONTAINER.BULLETS = [];
@@ -27,8 +25,6 @@ var Game_Layer = cc.LayerColor.extend({
         this.tank_1 = new Tank();
         this.addChild(this.tank_1);
 
-        //this.bg.drawSegment(cc.p(this.tank_1.point_1), cc.p(this.tank_1.point_2),2,cc.color(255,0,0));
-        //this.bg.drawSegment(cc.p(this.tank_1.point_2), cc.p(this.tank_1.point_3),2,cc.color(255,0,0));
 
         //Keyboard listener
         if (cc.sys.capabilities.hasOwnProperty('keyboard')) {
@@ -47,7 +43,9 @@ var Game_Layer = cc.LayerColor.extend({
     },
 
     update:function(dt){
-        this.tank_1.update(dt);
+        for(var i in this.children){
+            this.children[i].update(dt);
+        }
     }
 
 });
@@ -55,8 +53,9 @@ var Game_Layer = cc.LayerColor.extend({
 var GameScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
-        var layer = new Game_Layer();
-        this.addChild(layer);
+        TB.sharedGameLayer = new Game_Layer();
+
+        this.addChild(TB.sharedGameLayer);
 
     }
 });
