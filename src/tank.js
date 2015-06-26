@@ -11,6 +11,8 @@ var Tank = cc.Sprite.extend({
     map_j:  0,
     bulletRemain: 5,
     tank_tag: -1,
+    radius: 0,
+    active: false,
 
     ctor:   function(){
         this._super(res.tank_body);
@@ -33,6 +35,8 @@ var Tank = cc.Sprite.extend({
         this.setTag(this.tank_tag);
         TB.CONTAINER.TANKS.push(this);
         this.size = this.getContentSize();
+        this.radius = Math.min(this.size.height, this.size.width) * Math.sqrt(2)/2;
+        this.active = true;
 
     },
 
@@ -162,7 +166,16 @@ var Tank = cc.Sprite.extend({
     },
 
     shoot: function(){
-        Bullet.getOrCreateBullet(this.x,this.y,this.rotation,this.tank_tag);
+        var shoot_y = this.y + (2.5*this.size.height/2)*Math.sin(2*Math.PI/360*-this.rotation);
+        var shoot_x = this.x + (2.5*this.size.width/2)*Math.cos(2*Math.PI/360*-this.rotation);
+
+        Bullet.getOrCreateBullet(shoot_x,shoot_y,this.rotation,this.tank_tag);
+    },
+
+    destroy: function(){
+        this.removeFromParent();
+        this.active = false;
     }
+
 });
 

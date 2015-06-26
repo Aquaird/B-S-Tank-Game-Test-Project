@@ -9,6 +9,7 @@ var Bullet = cc.Sprite.extend({
     tank_tag: -1,
     active: true,
     angle: 0,
+    radius: 0,
 
     ctor: function (x, y, angle, tank_tag) {
         //add types her
@@ -19,6 +20,8 @@ var Bullet = cc.Sprite.extend({
         this.tank_tag = tank_tag;
         //this.scheduleUpdate();
         this.size = this.getContentSize();
+        this.radius = this.size.width * Math.sqrt(2)/2;
+        this.active = true;
 
         return this;
     },
@@ -99,7 +102,9 @@ var Bullet = cc.Sprite.extend({
 
     destroy: function() {
         TB.sharedGameLayer.getChildByTag(this.tank_tag).bulletRemain += 1;
+        this.active = false;
         this.removeFromParent();
+
     }
 
 });
@@ -110,8 +115,12 @@ Bullet.getOrCreateBullet = function(x,y,angle,tank_tag){
             selChild = TB.CONTAINER.BULLETS[i];
             if(selChild.tank_tag == tank_tag) {
                 if (selChild.active == false) {
+                    selChild.x = x;
+                    selChild.y = y;
+                    selChild.timeCount = 5;
+                    selChild.angle = angle;
                     selChild.active = true;
-                    selChild.visible = true;
+                    TB.sharedGameLayer.addChild(selChild,1);
                     return selChild;
                 }
             }

@@ -46,7 +46,37 @@ var Game_Layer = cc.LayerColor.extend({
         for(var i in this.children){
             this.children[i].update(dt);
         }
-    }
+        this.checkIsCollide();
+    },
+
+    collide:function(a,b){
+        var dist = cc.pDistance(a.getPosition(), b.getPosition());
+        if(dist < (a.radius+ b.radius)){
+            return true;
+        }
+        return false;
+    },
+
+    checkIsCollide:function () {
+        var selChild, bulletChild;
+        // check collide
+        var i, locShip = this._ship;
+        for (i = 0; i < TB.CONTAINER.TANKS.length; i++) {
+            selChild = TB.CONTAINER.TANKS[i];
+            if (!selChild.active)
+                continue;
+
+            for (var j = 0; j < TB.CONTAINER.BULLETS.length; j++) {
+                bulletChild = TB.CONTAINER.BULLETS[j];
+                if (bulletChild.active && this.collide(selChild, bulletChild)) {
+                    bulletChild.destroy();
+                    //add scores
+                    selChild.destroy();
+                }
+            }
+
+        }
+    },
 
 });
 
