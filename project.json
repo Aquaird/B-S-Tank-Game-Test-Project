@@ -12,6 +12,7 @@
 
     "jsList" : [
         "src/config/GameConfig.js",
+        "src/tools.js",
         "src/resource.js",
         "src/maze.js",
         "src/key.js",

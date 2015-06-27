@@ -1,10 +1,9 @@
 var res = {
-    HelloWorld_png: "res/HelloWorld.png",
+    tool_0: "res/tool_0.JPEG",
+    tool_1: "res/tool_1.JPEG",
     CloseNormal_png: "res/CloseNormal.png",
     CloseSelected_png: "res/CloseSelected.png",
     tank_body: "res/TankBody.png",
-    ball_png: "res/ball.png",
-    //tank_gun : "res/TankGun.png"
     bullet: "res/Bullet.png"
 };
 

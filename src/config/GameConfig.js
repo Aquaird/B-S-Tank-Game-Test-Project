@@ -48,6 +48,8 @@ TB.SPEED = {
 TB.SIZE = {
 };
 
+TB.toolRemains = 3;
+
 
 
 

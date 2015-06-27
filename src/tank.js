@@ -1,5 +1,9 @@
+/**
+ * Created by aquaird on 6/2/15.
+ */
+
 var Tank = cc.Sprite.extend({
-    type: 0,
+    weaponType: 0,
     direction:0,
     gun: null,
     size:   null,
@@ -14,6 +18,7 @@ var Tank = cc.Sprite.extend({
     radius: 0,
     active: false,
 
+
     ctor:   function(){
         this._super(res.tank_body);
         this.init();
@@ -23,20 +28,22 @@ var Tank = cc.Sprite.extend({
         //this.gun = new cc.Sprite(res.gun);
         //this.addChild(this.gun, 0);
 
-        this.setAnchorPoint(0.5,0.5);
-        this.x = Math.floor(Math.random()*TB.SIZE.width);
-        this.y = Math.floor(Math.random()*TB.SIZE.height);
-        while(this.block()){
-            this.x = Math.floor(Math.random()*TB.SIZE.width);
-            this.y = Math.floor(Math.random()*TB.SIZE.height);
-        }
-
+        this.setAnchorPoint(0.5,0.5)
         this.tank_tag = TB.CONTAINER.TANKS.length;
         this.setTag(this.tank_tag);
         TB.CONTAINER.TANKS.push(this);
         this.size = this.getContentSize();
         this.radius = Math.min(this.size.height, this.size.width) * Math.sqrt(2)/2;
         this.active = true;
+
+        this.x = Math.floor(Math.random()*TB.SIZE.width);
+        this.y = Math.floor(Math.random()*TB.SIZE.height);
+        this.updatepoint();
+        while(this.block()){
+            this.x = Math.floor(Math.random()*TB.SIZE.width);
+            this.y = Math.floor(Math.random()*TB.SIZE.height);
+            this.updatepoint();
+        }
 
     },
 
@@ -133,7 +140,7 @@ var Tank = cc.Sprite.extend({
         if(!TB.MAP.map.wall_row[i][j]){
             if(j*TB.MAP.unit_y >= ymin-3 && j*TB.MAP.unit_y<=ymax+3){
 
-                cc.log(i,j+" under");
+                //cc.log(i,j+" under");
                 return [true,1];
             }
         }
@@ -141,7 +148,7 @@ var Tank = cc.Sprite.extend({
         if(!TB.MAP.map.wall_row[i][j+1]){
             if((j+1)*TB.MAP.unit_y >= ymin-3 && (j+1)*TB.MAP.unit_y<=ymax+3){
 
-                cc.log(i,j+" up");
+                //cc.log(i,j+" up");
                 return [true,2];
             }
         }
@@ -149,7 +156,7 @@ var Tank = cc.Sprite.extend({
         if(!TB.MAP.map.wall_col[i][j]){
             if(i*TB.MAP.unit_x >= xmin-3 && i*TB.MAP.unit_x<=xmax+3){
 
-                cc.log(i,j+" left");
+                //cc.log(i,j+" left");
                 return [true,3];
             }
         }
@@ -157,7 +164,7 @@ var Tank = cc.Sprite.extend({
         if(!TB.MAP.map.wall_col[i+1][j]){
             if((i+1)*TB.MAP.unit_x >= xmin-3 && (i+1)*TB.MAP.unit_x<=xmax+3){
 
-                cc.log(i,j+" right");
+                //cc.log(i,j+" right");
                 return [true,4];
             }
         }
@@ -166,10 +173,12 @@ var Tank = cc.Sprite.extend({
     },
 
     shoot: function(){
-        var shoot_y = this.y + (2.5*this.size.height/2)*Math.sin(2*Math.PI/360*-this.rotation);
-        var shoot_x = this.x + (2.5*this.size.width/2)*Math.cos(2*Math.PI/360*-this.rotation);
+        if(this.weaponType == 0) {
+            var shoot_y = this.y + (1.3 * this.size.height / 2) * Math.sin(2 * Math.PI / 360 * -this.rotation);
+            var shoot_x = this.x + (1.3 * this.size.width / 2) * Math.cos(2 * Math.PI / 360 * -this.rotation);
+            Bullet.getOrCreateBullet(shoot_x, shoot_y, this.rotation, this.tank_tag);
+        }
 
-        Bullet.getOrCreateBullet(shoot_x,shoot_y,this.rotation,this.tank_tag);
     },
 
     destroy: function(){

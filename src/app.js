@@ -1,3 +1,7 @@
+/**
+ * Created by aquaird on 6/2/15.
+ */
+
 var Game_Layer = cc.LayerColor.extend({
 
     bg:null,
@@ -25,7 +29,6 @@ var Game_Layer = cc.LayerColor.extend({
         this.tank_1 = new Tank();
         this.addChild(this.tank_1);
 
-
         //Keyboard listener
         if (cc.sys.capabilities.hasOwnProperty('keyboard')) {
             cc.eventManager.addListener({
@@ -40,6 +43,7 @@ var Game_Layer = cc.LayerColor.extend({
         }
 
         this.scheduleUpdate();
+        this.schedule(tool.getOrCreateRandomTool, 5);
     },
 
     update:function(dt){
@@ -50,10 +54,15 @@ var Game_Layer = cc.LayerColor.extend({
     },
 
     collide:function(a,b){
+        //usual bullets
         var dist = cc.pDistance(a.getPosition(), b.getPosition());
         if(dist < (a.radius+ b.radius)){
             return true;
         }
+
+        //special tools
+        //laser
+
         return false;
     },
 
@@ -75,6 +84,13 @@ var Game_Layer = cc.LayerColor.extend({
                 }
             }
 
+            for (var j = 0; j < TB.CONTAINER.TOOLS.length; j++) {
+                bulletChild = TB.CONTAINER.TOOLS[j];
+                if (bulletChild.active && this.collide(selChild, bulletChild)) {
+                    bulletChild.destroy(selChild);
+                }
+            }
+
         }
     },
 
@@ -84,7 +100,6 @@ var GameScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
         TB.sharedGameLayer = new Game_Layer();
-
         this.addChild(TB.sharedGameLayer);
 
     }

@@ -1,3 +1,7 @@
+/**
+ * Created by aquaird on 6/2/15.
+ */
+
 //this is the function to make a maze(relax) by width(x) and height(y)
 function maze(x,y){
     var i,j;
