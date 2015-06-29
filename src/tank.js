@@ -174,8 +174,8 @@ var Tank = cc.Sprite.extend({
 
     shoot: function(){
         if(this.weaponType == 0) {
-            var shoot_y = this.y + (1.3 * this.size.height / 2) * Math.sin(2 * Math.PI / 360 * -this.rotation);
-            var shoot_x = this.x + (1.3 * this.size.width / 2) * Math.cos(2 * Math.PI / 360 * -this.rotation);
+            var shoot_y = this.y + (1.5 * this.radius) * Math.sin(2 * Math.PI / 360 * -this.rotation);
+            var shoot_x = this.x + (1.5 * this.radius) * Math.cos(2 * Math.PI / 360 * -this.rotation);
             Bullet.getOrCreateBullet(shoot_x, shoot_y, this.rotation, this.tank_tag);
         }
 
