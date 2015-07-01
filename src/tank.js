@@ -4,15 +4,11 @@
 
 var Tank = cc.Sprite.extend({
     weaponType: 0,
-    direction:0,
-    gun: null,
     size:   null,
     point_1:    [],
     point_2:    [],
     point_3:    [],
     point_4:    [],
-    map_i:  0,
-    map_j:  0,
     bulletRemain: 5,
     tank_tag: -1,
     radius: 0,

@@ -5,7 +5,6 @@
 var Bullet = cc.Sprite.extend({
     AttackType: 0,
     timeCount: 5,
-    angle: 0,
     tank_tag: -1,
     active: true,
     angle: 0,

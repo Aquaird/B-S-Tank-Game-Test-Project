@@ -6,7 +6,7 @@ var Game_Layer = cc.LayerColor.extend({
 
     bg:null,
     tank_1:null,
-    ball:null,
+
 
     ctor:function() {
         this._super(cc.color(255, 255, 255));
