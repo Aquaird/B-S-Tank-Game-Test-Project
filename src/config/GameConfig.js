@@ -4,6 +4,11 @@
 
 var TB = TB || {};
 
+
+//players
+TB.PLAYER = [0];
+TB.TANK_CONTROL = 0;
+
 //Game Layer
 TB.sharedGameLayer = null;
 
@@ -20,7 +25,7 @@ TB.MAP = {
 };
 
 //Key
-TB.KEYS = [];
+TB.KEYS = [][4];
 
 //Sound
 TB.SOUND = true;

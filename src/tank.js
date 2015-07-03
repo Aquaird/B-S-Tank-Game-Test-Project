@@ -13,16 +13,15 @@ var Tank = cc.Sprite.extend({
     tank_tag: -1,
     radius: 0,
     active: false,
+    move: [],
 
 
-    ctor:   function(){
+ctor:   function(){
         this._super(res.tank_body);
         this.init();
     },
 
     init:   function(){
-        //this.gun = new cc.Sprite(res.gun);
-        //this.addChild(this.gun, 0);
 
         this.setAnchorPoint(0.5,0.5)
         this.tank_tag = TB.CONTAINER.TANKS.length;
@@ -40,6 +39,7 @@ var Tank = cc.Sprite.extend({
             this.y = Math.floor(Math.random()*TB.SIZE.height);
             this.updatepoint();
         }
+        this.move = [false,false,false,false,false];
 
     },
 
@@ -55,7 +55,8 @@ var Tank = cc.Sprite.extend({
     },
 
     update:function (dt) {
-        if ((TB.KEYS[cc.KEY.w] || TB.KEYS[cc.KEY.up])) {
+
+        if (this.move[0]) {
             this.y += (dt * TB.SPEED.TANK)*Math.sin(2*Math.PI/360*-this.rotation);
             this.x += (dt * TB.SPEED.TANK)*Math.cos(2*Math.PI/360*-this.rotation);
             this.updatepoint();
@@ -66,7 +67,7 @@ var Tank = cc.Sprite.extend({
                 this.updatepoint();
             }
         }
-        if ((TB.KEYS[cc.KEY.s] || TB.KEYS[cc.KEY.down])) {
+        if (this.move[1]) {
             this.y -= (dt * TB.SPEED.TANK)*Math.sin(2*Math.PI/360*-this.rotation);
             this.x -= (dt * TB.SPEED.TANK)*Math.cos(2*Math.PI/360*-this.rotation);
             this.updatepoint();
@@ -77,7 +78,7 @@ var Tank = cc.Sprite.extend({
                 this.updatepoint();
             }
         }
-        if ((TB.KEYS[cc.KEY.d] || TB.KEYS[cc.KEY.right])) {
+        if (this.move[3]) {
             this.rotation += TB.SPEED.GUN * dt;
             this.updatepoint();
 
@@ -86,7 +87,7 @@ var Tank = cc.Sprite.extend({
                 this.updatepoint();
             }
         }
-        if ((TB.KEYS[cc.KEY.a] || TB.KEYS[cc.KEY.left])) {
+        if (this.move[2]) {
             this.rotation -= TB.SPEED.GUN * dt;
             this.updatepoint();
 
@@ -97,11 +98,11 @@ var Tank = cc.Sprite.extend({
         }
 
 
-        if(TB.KEYS[cc.KEY.j]){
+        if(this.move[4]){
 
             if(this.bulletRemain > 0) {
                 this.bulletRemain -= 1;
-                TB.KEYS[cc.KEY.j] = false;
+                this.move[4] = false;
                 this.shoot();
             }
 
@@ -183,4 +184,3 @@ var Tank = cc.Sprite.extend({
     }
 
 });
-

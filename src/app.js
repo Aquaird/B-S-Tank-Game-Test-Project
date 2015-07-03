@@ -6,6 +6,7 @@ var Game_Layer = cc.LayerColor.extend({
 
     bg:null,
     tank_1:null,
+    tank_control: 0,
 
 
     ctor:function() {
@@ -26,18 +27,74 @@ var Game_Layer = cc.LayerColor.extend({
         this.addChild(this.bg);
         this.bg.DrawMap();
 
-        this.tank_1 = new Tank();
-        this.addChild(this.tank_1);
 
-        //Keyboard listener
+        var tank;
+
+        //循环TB.PLAYERS,画出坦克
+        for(var i=0; i<TB.PLAYER.length; i++){
+            tank =  new Tank();
+            this.addChild(tank,i+1);
+        };
+
+        //这里的 0 指的是本地客户端需要控制的坦克是第几号坦克
+        //这个也是SOCKET传过来的
+        TB.tank_control = 0;
+        this.tank_1 = TB.CONTAINER.TANKS[0];
+
+        //本地键盘监听
         if (cc.sys.capabilities.hasOwnProperty('keyboard')) {
             cc.eventManager.addListener({
                 event: cc.EventListener.KEYBOARD,
                 onKeyPressed: function (key, event) {
-                    TB.KEYS[key] = true;
+
+                    switch(key){
+                        case (cc.KEY.w || cc.KEY.up):
+                            TB.CONTAINER.TANKS[TB.TANK_CONTROL].move[0] = true;
+                            break;
+                        case (cc.KEY.s || cc.KEY.down):
+                            TB.CONTAINER.TANKS[TB.TANK_CONTROL].move[1] = true;
+                            break;
+
+                        case (cc.KEY.a || cc.KEY.left):
+                            TB.CONTAINER.TANKS[TB.TANK_CONTROL].move[2] = true;
+                            break;
+
+                        case (cc.KEY.d || cc.KEY.right):
+                            TB.CONTAINER.TANKS[TB.TANK_CONTROL].move[3] = true;
+                            break;
+                        case (cc.KEY.j):
+                            TB.CONTAINER.TANKS[TB.TANK_CONTROL].move[4] = true;
+                            break;
+                    }
+
+                    //SOCKET传指令到服务器,按的是哪个键,是哪个坦克(客户端坦克)按的
+                    //data tank_tag:? do
+                    //do 是一个动作, 0上1下2左3右4开炮
                 },
                 onKeyReleased: function (key, event) {
-                    TB.KEYS[key] = false;
+                    switch(key){
+                        case (cc.KEY.w || cc.KEY.up):
+                            TB.CONTAINER.TANKS[TB.TANK_CONTROL].move[0] = false;
+                            break;
+                        case (cc.KEY.s || cc.KEY.down):
+                            TB.CONTAINER.TANKS[TB.TANK_CONTROL].move[1] = false;
+                            break;
+
+                        case (cc.KEY.a || cc.KEY.left):
+                            TB.CONTAINER.TANKS[TB.TANK_CONTROL].move[2] = false;
+                            break;
+
+                        case (cc.KEY.d || cc.KEY.right):
+                            TB.CONTAINER.TANKS[TB.TANK_CONTROL].move[3] = false;
+                            break;
+                        case (cc.KEY.j):
+                            TB.CONTAINER.TANKS[TB.TANK_CONTROL].move[4] = false;
+                            break;
+                    }
+
+                    //SOCKET传指令到服务器,按的是哪个键,是哪个坦克(客户端坦克)按的
+                    //data tank_tag:? move:?
+
                 }
             }, this);
         }
@@ -47,6 +104,13 @@ var Game_Layer = cc.LayerColor.extend({
     },
 
     update:function(dt){
+        //SOCKET循环接受坦克的最新动向
+        for(var i=0; i<TB.PLAYER.length; i++){
+            if(i != TB.TANK_CONTROL) {
+                //TB.CONTAINER.TANK[i].move = SOCKET获得的data.move
+            }
+        };
+
         for(var i in this.children){
             this.children[i].update(dt);
         }
